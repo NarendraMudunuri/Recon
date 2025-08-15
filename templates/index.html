@@ -1,0 +1,157 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recon</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- {{ url_for('static', filename='style.css') }} -->
+</head>
+<body>
+    
+    <nav class="header">
+        <h1 class="logo"> 🕵️‍♂️Website Recon Tool</h1>
+        <p class="logo"> Check domains, IPs, gather intelligence and do threat intell with a single webpage. </p>
+        <ul class="list">
+            <li> <a href="#virustotal"> Virus_total </a> </li>
+            <li> <a href="#"> Whois </a> </li>
+            <li> <a href="#netcraft_domain"> Netcraft </a> </li>
+        </ul>
+    </nav>
+
+    <p class="description">
+        Find Out Wether your website is malicious or Gather info about your website.
+    </p>
+    <main>
+        <form action="/" method="POST">
+            <section class="vt">
+                <label for="target" class="search" >🔗 Target_URL: </label> <br><br>    
+                <input type="text" class="search" name="url" placeholder="Enter URL" size="55" > 
+                <button type="submit" class="submit" name="button" value="url" > Start Url Scan </button> <br><br>
+                <label for="target" class="search">🌐 Target_IP_Address: </label><br><br>
+                <input type="text" class="search" name="ip" placeholder="Enter IP Address" size="55" >
+                <button type="submit" class="submit" name="button" value="ip"> Start IP Scan </button><br><br>
+            </section>
+        
+        
+            <section>
+                <label for="target" class="search">📜 Whois Scan: </label> <br><br>
+                <input type="text" class="search" name="domain" placeholder="Domian" size="55" >
+                <button type="submit" class="submit" name="button" value="domain"> Start Whois Scan </button><br><br>
+            </section>
+
+            <section> 
+                <label for="target" class="search">📊 Netcraft Scan: </label> <br><br>
+                <input type="text" class="search" name="netcraft_domain" placeholder="Domian" size="55" ><br><br>
+                <button type="submit" class="submit" name="button" value="netcraft"> Start Netcraft Scan </button>
+            </section>
+        </form>
+        <h2>📄 Scan Results</h2>
+        <div class="results"> 
+            {% if message %}
+                <p><strong>Engines: </strong></p>
+                    {% for engine in results %}
+                        {{ engine }}
+                    {% endfor %}
+                </table>
+                <p><strong>Total Clean:</strong> {{ count }}</p>
+                <p><strong>Harmless:</strong>  {{ message[0] }}</p>
+                <p><strong>Suspicious:</strong> {{ message[2] }}</p>
+                <p><strong>Malicious:</strong> {{ message[1] }}</p>
+                <p><strong>Malicious:</strong> {{ message[3] }}</p>
+                <p><strong>Undectected:</strong> {{ message[4] }}</p>
+                <p><strong>SHA256:</strong> {{ message[5] }}</p>
+                <p><strong>last_url:</strong> {{ message[6] }}</p>
+            {% endif %}
+            {% if message2 %}
+                <p><strong>Harmless:</strong> {{ message2[3] }}</p>
+                <p><strong>Suspicious :</strong> {{ message2[1] }}</p>
+                <p><strong>Malicious:</strong> {{ message2[0] }}</p>
+                <p><strong>Timeout:</strong> {{ message2[4] }}</p>
+                <p><strong>Undectected:</strong> {{ message2[2] }}</p>
+            {% endif %}
+        
+        
+            {% if whois_message %}
+                <div class="whois-info">
+                    <h2>WHOIS Information</h2>
+
+                    <p><strong>Domain:</strong> {{ whois_message[0] }}</p>
+                    <p><strong>Registrar:</strong> {{ whois_message[1] }}</p>
+                    <p><strong>URL:</strong> {{ whois_message[2] }}</p>
+                    <p><strong>DNSSEC:</strong> {{ whois_message[3] }}</p>
+
+                    <p><strong>Name Servers:</strong></p>
+                    <pre>{{ whois_message[4] }}</pre>
+
+                    <p><strong>Status:</strong></p>
+                    <pre>{{ whois_message[5] }}</pre>
+
+                    <p><strong>Creation Date:</strong> {{ whois_message[6] }}</p>
+                    <p><strong>Expiration Date:</strong> {{ whois_message[7] }}</p>
+                    <p><strong>Updated Date:</strong> {{ whois_message[8] }}</p>
+
+                    <p><strong>Name:</strong> {{ whois_message[9] }}</p>
+                    <p><strong>Registrant Org:</strong> {{ whois_message[10] }}</p>
+                    <p><strong>Address:</strong> {{ whois_message[11] }}</p>
+                    <p><strong>City:</strong> {{ whois_message[12] }}</p>
+                    <p><strong>State:</strong> {{ whois_message[13] }}</p>
+                    <p><strong>Country:</strong> {{ whois_message[14] }}</p>
+                    <p><strong>Zip Code:</strong> {{ whois_message[15] }}</p>
+                </div>
+            {% endif %}
+        
+            {% if netcraft and netcraft2 and netcraft3 %}
+                <p><strong>Site:</strong> {{ netcraft2[0][1] }}</p>
+                <p><strong>Site Rank:</strong> {{ netcraft[1][1] }}</p>
+                <p><strong>Date first seen:</strong> {{ netcraft[3][1] }}</p>
+                <p><strong>NetBlock owner:</strong> {{ netcraft2[1][1] }}</p>
+                <p><strong>Hosting company:</strong> {{ netcraft2[2][1] }}</p>
+                <p><strong>Hosting country:</strong> {{ netcraft2[3][1] }}</p>
+                <p><strong>IPv4 address:</strong> {{ netcraft2[4][1] }}</p>
+                <p><strong>IPv4 autonomous systems:</strong> {{ netcraft2[5][1] }}</p>
+                <p><strong>IPv6 address:</strong> {{ netcraft2[6][1] }}</p>
+                <p><strong>IPv6 autonomous systems:</strong> {{ netcraft2[7][1] }}</p>
+                <p><strong>Reverse DNS:</strong> {{ netcraft2[8][1] }}</p>
+                <p><strong>Domain:</strong> {{ netcraft2[9][1] }}</p>
+                <p><strong>Nameserver:</strong> {{ netcraft2[10][1] }}</p>
+                <p><strong>Domain registrar:</strong> {{ netcraft2[11][1] }}</p>
+                <p><strong>Nameserver organisation:</strong> {{ netcraft2[12][1] }}</p>
+                <p><strong>Organisation:</strong> {{ netcraft2[13][1] }}</p>
+                <p><strong>DNS admin:</strong> {{ netcraft2[14][1] }}</p>
+                <p><strong>Top Level Domain:</strong> {{ netcraft2[15][1] }}</p>
+                <p><strong>DNS Security Extensions:</strong> {{ netcraft2[16][1] }}</p> <br><br>
+
+                <h3>🗺️ Domains: </h3>
+                <table class="nettable">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Site</th>
+                            <th>First Seen</th>
+                            <th>Netblock</th>
+                            <th>OS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in range(1, netcraft3 | length) %}
+                            <tr>
+                                <td>{{ netcraft3[i][0] }}</td>
+                                <td>{{ netcraft3[i][1] }}</td>
+                                <td>{{ netcraft3[i][2] }}</td>
+                                <td>{{ netcraft3[i][3] }}</td>
+                                <td>{{ netcraft3[i][4] }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <!-- {% set total = netcraft3 | length %}
+                
+
+            {% endif %}
+        </div>
+    </main>
+    
+    
+    
+</body>
+</html>
